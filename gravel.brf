@@ -30,6 +30,10 @@ assign no_access
 	switch and access=no|private not bicycle=yes|permissive|designated|dismount true
 	false
 
+assign high_maxspeed
+	switch maxspeed=130|120|110 true
+	false
+
 #initial costs
 #---------------------------
 assign initialclassifier 
@@ -38,6 +42,7 @@ assign initialclassifier
     	switch bad_oneway	3
 	switch bad_highway	4
 	switch no_access	5
+	switch high_maxspeed	6
     	22
 
 assign initialcost 
@@ -46,6 +51,7 @@ assign initialcost
     	switch bad_oneway	10000
 	switch bad_highway	10000
 	switch no_access	10000
+	switch high_maxspeed	10000
     	0
 
 #turncost
@@ -59,9 +65,11 @@ assign turncost = 15
 #---------------------------
 assign fav_surface
 	switch surface=fine_gravel|compacted  1.0
-	switch surface=ground|dirt|earth|gravel|fine_gravel 1.1
+	switch surface=ground|dirt|earth|gravel|fine_gravel|cobblestone 1.1
 	switch surface=asphalt|concrete|paving_stones|wood|sett 1.2
-	switch surface=pebblestone|dirt|mud|sand|clay 1.3
+	switch surface=paved 1.3
+	switch surface=pebblestone|mud|sand|clay 1.4
+	switch surface=unpaved 1.4
 	1.5
 
 #highway types (we want track and unclassified first)
@@ -78,12 +86,14 @@ assign fav_highway
 #track types (we want track with a correct grade)
 #---------------------------
 assign fav_tracktype
+	switch highway=track|service|path|unclassified #only tags where tracktype has a meaning
 	switch tracktype=grade1 1.0
 	switch tracktype=grade2 1.1
 	switch tracktype=grade3 1.2
 	switch tracktype=grade4 1.3
 	switch tracktype=grade5 1.4
 	1.2
+	1.0
 
 #smoothness types (worst ones are already forbidden)
 #---------------------------
@@ -98,12 +108,26 @@ assign fav_smoothness
 #---------------------------
 #icn=international, ncn=national, rcn=regional, lcn=local
 assign fav_cycleroute
-	switch or route_bicycle_icn=yes or route_bicycle_ncn=yes or route_bicycle_rcn=yes route_bicycle_lcn=yes 1.0 1.2
+	switch or route_bicycle_icn=yes or route_bicycle_ncn=yes or route_bicycle_rcn=yes route_bicycle_lcn=yes 1.0 1.1
+
+#hiking routes (we want a small malus if it's one)
+#---------------------------
+#walking network
+assign unfav_hiking
+	switch or route_hiking_iwn=yes or route_hiking_nwn=yes or route_hiking_rwn=yes route_hiking_lwn=yes 1.1 1.0
 
 #oneway (we want to avoid taking one way streets in opposite direction if it's cheap to avoid it)
 #---------------------------
 assign fav_oneway
 	switch and reversedirection=yes and oneway=yes oneway:bicycle=no 1.4 1.0
+
+#avoid highspeed roads (highest ones already forbidden)
+#---------------------------
+assign fav_lowspeed
+	switch maxspeed=20|30|40|50 1.0
+	switch maxspeed=60|70 1.1
+	switch maxspeed=80|90 1.2
+	1.0
 
 assign costfactor
 	multiply fav_surface 
@@ -111,20 +135,32 @@ assign costfactor
 	multiply fav_cycleroute 
 	multiply fav_oneway
 	multiply fav_tracktype
-	fav_smoothness
+	multiply fav_smoothness
+	multiply unfav_hiking
+	fav_lowspeed
 
 ---context:node  # following code refers to node tags
 
+#forbidden nodes
+#---------------------------
+
+assign no_access
+	switch access=no	1000000
+	switch bicycle=no	1000000
+	1
 
 #barriers
 #---------------------------
 assign barrierpenalty
-	switch barrier=					0.0
-	switch barrier=gate|swing_gate|lift_gate  	1.1
-	switch barrier=block|bollard    		1.4
-	3.0
+	switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate 	10
+	switch barrier=gate									13
+	switch barrier=lift_gate 								15
+	switch barrier=										1.0
+	20
 
 assign initialcost 10
 
 assign initialcost
-	multiply initialcost barrierpenalty
+	multiply initialcost
+	multiply barrierpenalty
+	no_access
