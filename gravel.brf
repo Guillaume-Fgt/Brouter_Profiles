@@ -5,6 +5,12 @@ assign validForBikes true
 assign validForCars false
 assign validForFoot false
 
+#Elevation
+#---------------------------
+assign downhillcost	20
+assign uphillcost	25
+
+
 #Options
 #---------------------------
 assign avoid_hiking = false	# %avoid_hiking% | if you want to avoid hiking routes | boolean
@@ -111,7 +117,7 @@ assign fav_tracktype
 assign fav_smoothness
 	switch smoothness=excellent|good|intermediate	1.0
 	switch smoothness=bad				1.1
-	switch smoothness=very_bad			1.4
+	switch smoothness=very_bad			1.3
 	1.2
 
 #cycle routes (we want a small bonus if it's one)
@@ -164,8 +170,8 @@ assign costfactor
 #---------------------------
 
 assign no_access
-	switch access=no	1000000
-	switch bicycle=no	1000000
+	switch access=no|private	1000000
+	switch bicycle=no		1000000
 	1.0
 
 #barriers
