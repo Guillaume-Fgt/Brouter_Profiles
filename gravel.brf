@@ -25,10 +25,11 @@ assign bad_sac_scale
 	sac_scale=difficult_alpine_hiking|demanding_alpine_hiking|alpine_hiking|demanding_mountain_hiking|mountain_hiking|hiking
 	
 assign bad_paths
-	switch and highway=path smoothness=impassable|very_horrible|horrible		true
-	switch and highway=path bad_sac_scale						true
-	switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5	true
-	switch tracktype=grade5								true
+	switch and highway=path smoothness=impassable|very_horrible|horrible			true
+	switch and highway=path bad_sac_scale							true
+	switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5		true
+	switch tracktype=grade5									true
+	switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no	true
 	false
     
 assign bad_oneway
