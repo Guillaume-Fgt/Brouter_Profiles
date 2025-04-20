@@ -2,7 +2,12 @@ WIP
 
 I am trying to generate .gpx files sticking to my way of practicing gravel bike.  
 I don't want technical singles, I don't want to have my derailleur soaking in the mud, I want to cover great distance taking tracks and paths
-instead of road as much as possible. In cities, I want to avoid to go in reverse direction in one way streets. 
+instead of road as much as possible. The goal is to ride this type of track:
+
+<img src="https://github.com/user-attachments/assets/5e81cb9a-9cd6-4d54-a73c-3fe8d0eee36e" width=25% height=25%>
+<img src="https://github.com/user-attachments/assets/8cdd99ba-21ea-4e93-93af-dcb8a5f6f1d3" width=25% height=25%>
+
+In cities, I want to avoid going in reverse direction in one way streets. 
 And I don't care that much about cycleways.
 
 ## Forbidden segments:
