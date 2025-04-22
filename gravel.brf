@@ -38,7 +38,7 @@ assign bad_oneway
     	false
 
 assign bad_highway
-	switch and highway=footway|bridleway|pedestrian not bicycle=yes|designated|permissive	true
+	switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount	true
 	switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor			true
 	switch bicycle=no true
 	switch toll=yes true
@@ -100,25 +100,25 @@ assign fav_surface
 #highway types
 #---------------------------
 assign fav_highway
-	switch highway=track						1.0
-	switch highway=path 						1.1
-	switch highway=unclassified|service				1.2
-	switch highway=footway|pedestrian|living_street|residential	1.3
-	switch highway=tertiary|tertiary_link|bridleway|cycleway	1.4
-	switch highway=secondary|secondary_link 			1.5
-	switch highway=primary|primary_link 				1.6
+	switch highway=track						0.9
+	switch highway=path 						1.0
+	switch highway=unclassified|service				1.1
+	switch highway=footway|pedestrian|living_street|residential	1.2
+	switch highway=tertiary|tertiary_link|bridleway|cycleway	1.3
+	switch highway=secondary|secondary_link 			1.4
+	switch highway=primary|primary_link 				1.5
 	1.6
 
 #track types
 #---------------------------
 assign fav_tracktype
 	switch highway=track|service|path|unclassified #only tags where tracktype has a meaning
-	switch tracktype=grade1 1.0
-	switch tracktype=grade2 1.1
-	switch tracktype=grade3 1.2
-	switch tracktype=grade4 1.3
-	switch tracktype=grade5 1.4
-	1.2
+	switch tracktype=grade1 0.9
+	switch tracktype=grade2 1.0
+	switch tracktype=grade3 1.1
+	switch tracktype=grade4 1.2
+	switch tracktype=grade5 1.3
+	1.1
 	1.0
 
 #smoothness types (worst ones are already forbidden)
@@ -144,14 +144,23 @@ assign fav_cycleroute
 #walking network
 assign unfav_hiking
 	switch avoid_hiking
-	switch or route_hiking_iwn=yes or route_hiking_nwn=yes or route_hiking_rwn=yes route_hiking_lwn=yes 1.1 
-	1.0
+	switch	or route_hiking_iwn=yes
+		or route_hiking_nwn=yes
+		or route_hiking_rwn=yes
+		or route_hiking_lwn=yes
+		route_hiking_=yes 1.1 
+		1.0
 	1.0
 
 #oneway (we want to avoid taking one way streets in opposite direction if it's cheap to avoid it)
 #---------------------------
 assign avoid_oneway
 	switch and reversedirection=yes and oneway=yes oneway:bicycle=no 1.2 1.0
+
+#we allow to dismount the bike with a penalty
+#---------------------------
+assign dismount_penalty
+	switch bicycle=dismount 1.2 1.0
 
 #avoid highspeed roads (highest ones already forbidden)
 #---------------------------
@@ -201,6 +210,7 @@ assign costfactor
 	multiply fav_highway 
 	multiply fav_cycleroute 
 	multiply avoid_oneway
+	multiply dismount_penalty
 	multiply fav_tracktype
 	multiply fav_smoothness
 	multiply unfav_hiking
@@ -223,9 +233,8 @@ assign no_access
 #---------------------------
 assign barrierpenalty
 	switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate|kerb	1
-	switch barrier=gate		switch safe_gate						1000000 5
-	switch barrier=lift_gate	switch safe_gate						1000000 15
-	0
+	switch barrier=gate|lift_gate		switch safe_gate					1000000 1
+	1
 
 assign initialcost 0
 
