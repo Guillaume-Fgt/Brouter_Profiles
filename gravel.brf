@@ -163,6 +163,39 @@ assign fav_lowspeed
 	switch and maxspeed= highway=primary|primary_link|secondary|secondary_link 	1.2
 	1.0
 
+#avoid riding next to highspeed roads
+#---------------------------
+assign noise_penalty
+     switch estimated_noise_class=1  0.8
+     switch estimated_noise_class=2  0.9
+     switch estimated_noise_class=3  1.0
+     switch estimated_noise_class=4  1.1
+     switch estimated_noise_class=5  1.2
+     switch estimated_noise_class=6  1.4
+     0.8
+
+#we want forest!
+#---------------------------
+assign no_forest_penalty
+     switch estimated_forest_class=1  1.3
+     switch estimated_forest_class=2  1.2
+     switch estimated_forest_class=3  1.1
+     switch estimated_forest_class=4  1.0
+     switch estimated_forest_class=5  0.9
+     switch estimated_forest_class=6  0.8
+     1.0
+
+#we want rivers and canals!
+#---------------------------
+assign no_river_penalty
+     switch estimated_river_class=1  1.3
+     switch estimated_river_class=2  1.2
+     switch estimated_river_class=3  1.1
+     switch estimated_river_class=4  1.0
+     switch estimated_river_class=5  0.9
+     switch estimated_river_class=6  0.8
+     1.0
+
 assign costfactor
 	multiply fav_surface 
 	multiply fav_highway 
@@ -171,7 +204,10 @@ assign costfactor
 	multiply fav_tracktype
 	multiply fav_smoothness
 	multiply unfav_hiking
-	fav_lowspeed
+	multiply fav_lowspeed
+	multiply noise_penalty
+	multiply no_forest_penalty
+	no_river_penalty
 
 ---context:node  # following code refers to node tags
 
