@@ -7,14 +7,14 @@ assign validForFoot false
 
 #Elevation
 #---------------------------
-assign downhillcost	20
-assign uphillcost	25
+assign downhillcost 20
+assign uphillcost   25
 
 
 #Options
 #---------------------------
-assign avoid_hiking = false	# %avoid_hiking% | if you want to avoid hiking routes | boolean
-assign safe_gate = false	# %safe_gate% | avoid gates to not encounter closed parcs/public gardens...  | boolean
+assign avoid_hiking = false # %avoid_hiking% | if you want to avoid hiking routes | boolean
+assign safe_gate = false    # %safe_gate% | avoid gates to not encounter closed parcs/public gardens...  | boolean
 
 
 ---context:way   # following code refers to way-tags
@@ -22,62 +22,62 @@ assign safe_gate = false	# %safe_gate% | avoid gates to not encounter closed par
 #forbidden segments (cost=10000)
 #---------------------------
 assign bad_sac_scale
-	sac_scale=difficult_alpine_hiking|demanding_alpine_hiking|alpine_hiking|demanding_mountain_hiking|mountain_hiking|hiking
+        sac_scale=difficult_alpine_hiking|demanding_alpine_hiking|alpine_hiking|demanding_mountain_hiking|mountain_hiking|hiking
 	
 assign bad_paths
-	switch and highway=path smoothness=impassable|very_horrible|horrible			true
-	switch and highway=path bad_sac_scale							true
-	switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5		true
-	switch tracktype=grade5									true
-	switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no	true
-	false
+        switch and highway=path smoothness=impassable|very_horrible|horrible                true
+        switch and highway=path bad_sac_scale                                               true
+        switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5       true
+        switch tracktype=grade5                                                             true
+        switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no true
+        false
     
 assign bad_oneway
-	switch and reversedirection=yes and oneway=yes not oneway:bicycle=no	true
-	switch and reversedirection=yes junction=roundabout|circular		true
-    	false
+        switch and reversedirection=yes and oneway=yes not oneway:bicycle=no true
+        switch and reversedirection=yes junction=roundabout|circular         true
+        false
 
 assign bad_highway
-	switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount	true
-	switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor			true
-	switch bicycle=no true
-	switch toll=yes true
-	false
+        switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount true
+        switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor                        true
+        switch bicycle=no                                                                              true
+        switch toll=yes                                                                                true
+        false
 
 assign no_access
-	switch and access=no|private not bicycle=yes|permissive|designated|dismount	true
-	switch railway=rail true
-	false
+        switch and access=no|private not bicycle=yes|permissive|designated|dismount true
+        switch railway=rail                                                         true
+        false
 
 assign no_water
-	switch waterway=river|canal|fairway	true
-	switch route=ferry			true
-	switch boat=yes				true
-	false
+        switch waterway=river|canal|fairway true
+        switch route=ferry                  true
+        switch boat=yes                     true
+        false
 
 assign high_maxspeed
-	switch maxspeed=130|120|110 true
-	false
+        switch maxspeed=130|120|110 true
+        false
 
 #initial costs
 #---------------------------
 assign initialclassifier 
-	switch no_water		1
-	switch bad_paths	2
-	switch bad_oneway	3
-	switch bad_highway	4
-	switch no_access	5
-	switch high_maxspeed	6
-    	22
+        switch no_water      1
+        switch bad_paths     2
+        switch bad_oneway    3
+        switch bad_highway   4
+        switch no_access     5
+        switch high_maxspeed 6
+        22
 
 assign initialcost 
-	switch no_water		10000
-	switch bad_paths	10000
-	switch bad_oneway	10000
-	switch bad_highway	10000
-	switch no_access	10000
-	switch high_maxspeed	10000
-    	0
+        switch no_water      10000
+        switch bad_paths     10000
+        switch bad_oneway    10000
+        switch bad_highway   10000
+        switch no_access     10000
+        switch high_maxspeed 10000
+        0
 
 #turncost
 #---------------------------
@@ -89,135 +89,135 @@ assign turncost = 15
 #surface (good unpaved first)
 #---------------------------
 assign fav_surface
-	switch surface=fine_gravel|compacted				1.0
-	switch surface=ground|dirt|earth|gravel|fine_gravel|cobblestone	1.1
-	switch surface=asphalt|concrete|paving_stones|wood|sett		1.2
-	switch surface=paved						1.3
-	switch surface=pebblestone|mud|sand|clay			1.4
-	switch surface=unpaved						1.4
-	1.5
+        switch surface=fine_gravel|compacted                            1.0
+        switch surface=ground|dirt|earth|gravel|fine_gravel|cobblestone 1.1
+        switch surface=asphalt|concrete|paving_stones|wood|sett         1.2
+        switch surface=paved                                            1.3
+        switch surface=pebblestone|mud|sand|clay                        1.4
+        switch surface=unpaved                                          1.4
+        1.5
 
 #highway types
 #---------------------------
 assign fav_highway
-	switch highway=track						0.9
-	switch highway=path 						1.0
-	switch highway=unclassified|service				1.1
-	switch highway=footway|pedestrian|living_street|residential	1.2
-	switch highway=tertiary|tertiary_link|bridleway|cycleway	1.3
-	switch highway=secondary|secondary_link 			1.4
-	switch highway=primary|primary_link 				1.5
-	1.6
+        switch highway=track                                        0.9
+        switch highway=path                                         1.0
+        switch highway=unclassified|service                         1.1
+        switch highway=footway|pedestrian|living_street|residential 1.2
+        switch highway=tertiary|tertiary_link|bridleway|cycleway    1.3
+        switch highway=secondary|secondary_link                     1.4
+        switch highway=primary|primary_link                         1.5
+        1.6
 
 #track types
 #---------------------------
 assign fav_tracktype
-	switch highway=track|service|path|unclassified #only tags where tracktype has a meaning
-	switch tracktype=grade1 0.9
-	switch tracktype=grade2 1.0
-	switch tracktype=grade3 1.1
-	switch tracktype=grade4 1.2
-	switch tracktype=grade5 1.3
-	1.1
-	1.0
+        switch highway=track|service|path|unclassified #only tags where tracktype has a meaning
+        switch tracktype=grade1 0.9
+        switch tracktype=grade2 1.0
+        switch tracktype=grade3 1.1
+        switch tracktype=grade4 1.2
+        switch tracktype=grade5 1.3
+        1.1
+        1.0
 
 #smoothness types (worst ones are already forbidden)
 #---------------------------
 assign fav_smoothness
-	switch smoothness=excellent|very_good|good|intermediate	1.0
-	switch smoothness=bad				1.1
-	switch smoothness=very_bad			1.3
-	1.2
+        switch smoothness=excellent|very_good|good|intermediate 1.0
+        switch smoothness=bad                                   1.1
+        switch smoothness=very_bad                              1.3
+        1.2
 
 #cycle routes (we want a small bonus if it's one)
 #---------------------------
 #icn=international, ncn=national, rcn=regional, lcn=local
 assign fav_cycleroute
-	switch	or route_bicycle_icn=yes
-		or route_bicycle_ncn=yes
-		or route_bicycle_rcn=yes
-		route_bicycle_lcn=yes 1.0 
-		1.1
+        switch or route_bicycle_icn=yes
+               or route_bicycle_ncn=yes
+               or route_bicycle_rcn=yes
+                  route_bicycle_lcn=yes 1.0 
+               1.1
 
 #hiking routes (we want a small malus if it's one and option was ticked)
 #---------------------------
 #walking network
 assign unfav_hiking
-	switch avoid_hiking
-	switch	or route_hiking_iwn=yes
-		or route_hiking_nwn=yes
-		or route_hiking_rwn=yes
-		or route_hiking_lwn=yes
-		route_hiking_=yes 1.1 
-		1.0
-	1.0
+        switch avoid_hiking
+        switch or route_hiking_iwn=yes
+               or route_hiking_nwn=yes
+               or route_hiking_rwn=yes
+               or route_hiking_lwn=yes
+                  route_hiking_=yes 1.1 
+               1.0
+        1.0
 
 #oneway (we want to avoid taking one way streets in opposite direction if it's cheap to avoid it)
 #---------------------------
 assign avoid_oneway
-	switch and reversedirection=yes and oneway=yes oneway:bicycle=no 1.2 1.0
+        switch and reversedirection=yes and oneway=yes oneway:bicycle=no 1.2 1.0
 
 #we allow to dismount the bike with a penalty
 #---------------------------
 assign dismount_penalty
-	switch bicycle=dismount 1.2 1.0
+        switch bicycle=dismount 1.2 1.0
 
 #avoid highspeed roads (highest ones already forbidden)
 #---------------------------
 assign fav_lowspeed
-	switch maxspeed=20|30|40|50							1.0
-	switch maxspeed=60|70								1.1
-	switch maxspeed=80|90								1.2
-	switch and maxspeed= highway=tertiary|tertiary_link 				1.1 
-	switch and maxspeed= highway=primary|primary_link|secondary|secondary_link 	1.2
-	1.0
+        switch maxspeed=20|30|40|50                                                1.0
+        switch maxspeed=60|70                                                      1.1
+        switch maxspeed=80|90                                                      1.2
+        switch and maxspeed= highway=tertiary|tertiary_link                        1.1 
+        switch and maxspeed= highway=primary|primary_link|secondary|secondary_link 1.2
+        1.0
 
 #avoid riding next to highspeed roads
 #---------------------------
 assign noise_penalty
-     switch estimated_noise_class=1  0.8
-     switch estimated_noise_class=2  0.9
-     switch estimated_noise_class=3  1.0
-     switch estimated_noise_class=4  1.1
-     switch estimated_noise_class=5  1.2
-     switch estimated_noise_class=6  1.4
-     0.8
+        switch estimated_noise_class=1 0.8
+        switch estimated_noise_class=2 0.9
+        switch estimated_noise_class=3 1.0
+        switch estimated_noise_class=4 1.1
+        switch estimated_noise_class=5 1.2
+        switch estimated_noise_class=6 1.4
+        0.8
 
 #we want forest!
 #---------------------------
 assign no_forest_penalty
-     switch estimated_forest_class=1  1.3
-     switch estimated_forest_class=2  1.2
-     switch estimated_forest_class=3  1.1
-     switch estimated_forest_class=4  1.0
-     switch estimated_forest_class=5  0.9
-     switch estimated_forest_class=6  0.8
-     1.0
+        switch estimated_forest_class=1 1.3
+        switch estimated_forest_class=2 1.2
+        switch estimated_forest_class=3 1.1
+        switch estimated_forest_class=4 1.0
+        switch estimated_forest_class=5 0.9
+        switch estimated_forest_class=6 0.8
+        1.0
 
 #we want rivers and canals!
 #---------------------------
 assign no_river_penalty
-     switch estimated_river_class=1  1.3
-     switch estimated_river_class=2  1.2
-     switch estimated_river_class=3  1.1
-     switch estimated_river_class=4  1.0
-     switch estimated_river_class=5  0.9
-     switch estimated_river_class=6  0.8
-     1.0
+        switch estimated_river_class=1 1.3
+        switch estimated_river_class=2 1.2
+        switch estimated_river_class=3 1.1
+        switch estimated_river_class=4 1.0
+        switch estimated_river_class=5 0.9
+        switch estimated_river_class=6 0.8
+        1.0
 
 assign costfactor
-	multiply fav_surface 
-	multiply fav_highway 
-	multiply fav_cycleroute 
-	multiply avoid_oneway
-	multiply dismount_penalty
-	multiply fav_tracktype
-	multiply fav_smoothness
-	multiply unfav_hiking
-	multiply fav_lowspeed
-	multiply noise_penalty
-	multiply no_forest_penalty
-	no_river_penalty
+        multiply fav_surface
+        multiply fav_highway 
+        multiply fav_cycleroute 
+        multiply avoid_oneway
+        multiply dismount_penalty
+        multiply fav_tracktype
+        multiply fav_smoothness
+        multiply unfav_hiking
+        multiply fav_lowspeed
+        multiply noise_penalty
+        multiply no_forest_penalty
+                 no_river_penalty
 
 ---context:node  # following code refers to node tags
 
@@ -225,21 +225,21 @@ assign costfactor
 #---------------------------
 
 assign no_access
-	switch and access=no|private not bicycle=yes|permissive|designated|dismount	1000000
-	switch bicycle=no		1000000
-	1.0
+        switch and access=no|private not bicycle=yes|permissive|designated|dismount 1000000
+        switch bicycle=no                                                           1000000
+        1.0
 
 #barriers
 #---------------------------
 assign barrierpenalty
-	switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate|kerb	1
-	switch barrier=gate|lift_gate switch safe_gate							1000000 1
-	1
+        switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate|kerb 1
+        switch barrier=gate|lift_gate switch safe_gate                                             1000000 1
+        1
 
 assign initialcost 0
 
 assign initialcost
-	add initialcost
-	multiply add initialcost 10
-	multiply barrierpenalty
-	no_access
+        add      initialcost
+        multiply add initialcost 10
+        multiply barrierpenalty
+                 no_access
