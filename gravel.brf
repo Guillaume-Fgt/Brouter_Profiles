@@ -225,7 +225,7 @@ assign costfactor
 #---------------------------
 
 assign no_access
-	switch access=no|private	1000000
+	switch and access=no|private not bicycle=yes|permissive|designated|dismount	1000000
 	switch bicycle=no		1000000
 	1.0
 
@@ -233,7 +233,7 @@ assign no_access
 #---------------------------
 assign barrierpenalty
 	switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate|kerb	1
-	switch barrier=gate|lift_gate		switch safe_gate					1000000 1
+	switch barrier=gate|lift_gate switch safe_gate							1000000 1
 	1
 
 assign initialcost 0
