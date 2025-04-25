@@ -89,36 +89,45 @@ assign turncost = 15
 #surface (good unpaved first)
 #---------------------------
 assign fav_surface
-        switch surface=fine_gravel|compacted                            1.0
-        switch surface=ground|dirt|earth|gravel|fine_gravel|cobblestone 1.1
-        switch surface=asphalt|concrete|paving_stones|wood|sett         1.2
-        switch surface=paved                                            1.3
-        switch surface=pebblestone|mud|sand|clay                        1.4
-        switch surface=unpaved                                          1.4
-        1.5
+        switch surface=fine_gravel|compacted                                      0.9
+        switch surface=ground|dirt|earth|gravel|fine_gravel|cobblestone           1.0
+        switch surface=asphalt|concrete|paving_stones|wood|sett                   1.1
+        switch surface=paved                                                      1.2
+        switch surface=pebblestone|mud|sand|clay                                  1.3
+        switch surface=unpaved                                                    1.3
+
+        switch and surface= highway=footway|pedestrian|living_street|residential  1.1
+        switch and surface= highway=tertiary|tertiary_link|cycleway               1.1
+        switch and surface= highway=secondary|secondary_link                      1.1
+        switch and surface= highway=primary|primary_link                          1.1
+        switch and surface= highway=unclassified|service                          1.2
+        switch and surface= highway=track                                         1.0
+        switch and surface= highway=path|bridleway                                1.0
+        1.4
+
 
 #highway types
 #---------------------------
 assign fav_highway
-        switch highway=track                                        0.9
-        switch highway=path                                         1.0
-        switch highway=unclassified|service                         1.1
-        switch highway=footway|pedestrian|living_street|residential 1.2
-        switch highway=tertiary|tertiary_link|bridleway|cycleway    1.3
-        switch highway=secondary|secondary_link                     1.4
-        switch highway=primary|primary_link                         1.5
-        1.6
+        switch highway=track                                        0.7
+        switch highway=path                                         0.8
+        switch highway=unclassified|service                         0.9
+        switch highway=footway|pedestrian|living_street|residential 1.0
+        switch highway=tertiary|tertiary_link|bridleway|cycleway    1.1
+        switch highway=secondary|secondary_link                     1.2
+        switch highway=primary|primary_link                         1.3
+        1.5
 
 #track types
 #---------------------------
 assign fav_tracktype
         switch highway=track|service|path|unclassified #only tags where tracktype has a meaning
-        switch tracktype=grade1 0.9
-        switch tracktype=grade2 1.0
-        switch tracktype=grade3 1.1
-        switch tracktype=grade4 1.2
-        switch tracktype=grade5 1.3
-        1.1
+        switch tracktype=grade1 1.0
+        switch tracktype=grade2 1.1
+        switch tracktype=grade3 1.2
+        switch tracktype=grade4 1.3
+        switch tracktype=grade5 1.4
+        1.3
         1.0
 
 #smoothness types (worst ones are already forbidden)
@@ -127,7 +136,15 @@ assign fav_smoothness
         switch smoothness=excellent|very_good|good|intermediate 1.0
         switch smoothness=bad                                   1.1
         switch smoothness=very_bad                              1.3
-        1.2
+
+        switch and smoothness= highway=footway|pedestrian|living_street|residential 1.0
+        switch and smoothness= highway=tertiary|tertiary_link|cycleway              1.0
+        switch and smoothness= highway=secondary|secondary_link                     1.0
+        switch and smoothness= highway=primary|primary_link                         1.0
+        switch and smoothness= highway=unclassified|service                         1.1
+        switch and smoothness= highway=path|bridleway                               1.6
+        switch and smoothness= highway=track                                        1.4
+        1.8
 
 #cycle routes (we want a small bonus if it's one)
 #---------------------------
@@ -136,8 +153,8 @@ assign fav_cycleroute
         switch or route_bicycle_icn=yes
                or route_bicycle_ncn=yes
                or route_bicycle_rcn=yes
-                  route_bicycle_lcn=yes 1.0 
-               1.1
+                  route_bicycle_lcn=yes 0.8 
+               1.0
 
 #hiking routes (we want a small malus if it's one and option was ticked)
 #---------------------------
@@ -165,12 +182,14 @@ assign dismount_penalty
 #avoid highspeed roads (highest ones already forbidden)
 #---------------------------
 assign fav_lowspeed
-        switch maxspeed=20|30|40|50                                                1.0
-        switch maxspeed=60|70                                                      1.1
-        switch maxspeed=80|90                                                      1.2
-        switch and maxspeed= highway=tertiary|tertiary_link                        1.1 
-        switch and maxspeed= highway=primary|primary_link|secondary|secondary_link 1.2
+        switch maxspeed=20|30                                                      1.0
+        switch maxspeed=40|50                                                      1.1
+        switch maxspeed=60|70                                                      1.3
+        switch maxspeed=80|90                                                      1.5
+        switch and maxspeed= highway=tertiary|tertiary_link                        1.3
+        switch and maxspeed= highway=primary|primary_link|secondary|secondary_link 1.5
         1.0
+
 
 #avoid riding next to highspeed roads
 #---------------------------
@@ -227,19 +246,18 @@ assign costfactor
 assign no_access
         switch and access=no|private not bicycle=yes|permissive|designated|dismount 1000000
         switch bicycle=no                                                           1000000
-        1.0
+        0
 
 #barriers
 #---------------------------
 assign barrierpenalty
         switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate|kerb 1
         switch barrier=gate|lift_gate switch safe_gate                                             1000000 1
-        1
+        0
 
 assign initialcost 0
 
 assign initialcost
-        add      initialcost
-        multiply add initialcost 10
-        multiply barrierpenalty
-                 no_access
+        add initialcost
+        add barrierpenalty
+            no_access
