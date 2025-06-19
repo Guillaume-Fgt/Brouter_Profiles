@@ -13,6 +13,7 @@ assign uphillcost   25
 
 #Options
 #---------------------------
+assign turn_cost = 100    # %turn_cost% | To decrease the num. of direction changes, increase this value.| number
 assign avoid_hiking = false # %avoid_hiking% | if you want to avoid hiking routes | boolean
 assign safe_gate = false    # %safe_gate% | avoid gates to not encounter closed parcs/public gardens...  | boolean
 
@@ -59,7 +60,7 @@ assign initialcost
 #is implicitely added to costfactor
 # this is the cost (in Meter) for a 90-degree turn
 # The actual cost is calculated as turncost*cos(angle)
-assign turncost = 125
+assign turncost = turn_cost
 
 #surface (good unpaved first)
 #---------------------------
