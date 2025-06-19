@@ -19,65 +19,39 @@ assign safe_gate = false    # %safe_gate% | avoid gates to not encounter closed 
 
 ---context:way   # following code refers to way-tags
 
-#forbidden segments (cost=10000)
+#Forbidden ways=>costfactor values>=10 000 (not initialcost!)
+
+#initial costs
 #---------------------------
-assign bad_sac_scale
-        sac_scale=difficult_alpine_hiking|demanding_alpine_hiking|alpine_hiking|demanding_mountain_hiking|mountain_hiking|hiking
-	
-assign bad_paths
-        switch and highway=path smoothness=impassable|very_horrible|horrible                 true
-        switch and highway=path bad_sac_scale                                                true
-        switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5        true
-        switch tracktype=grade5                                                              true
-        switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no  true
-        switch and highway=path|track and smoothness= and surface= and mtb:scale= tracktype= true
-        false
-    
-assign bad_oneway
-        switch and reversedirection=yes and oneway=yes not oneway:bicycle=no true
-        switch and reversedirection=yes junction=roundabout|circular         true
+
+#penalty if we have to take steps
+assign steps
+        switch highway=steps true
         false
 
+#penalty if we have to dismount the bike
+assign dismount
+        switch bicycle=dismount true
+        false
+
+#penalty if we use an highway for pedestrians or horses
 assign bad_highway
-        switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount true
-        switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor                        true
-        switch bicycle=no                                                                              true
-        switch toll=yes                                                                                true
+        switch and highway=footway|bridleway|pedestrian bicycle=yes|permissive|designated|dismount true
         false
 
-assign no_access
-        switch and access=no|private not bicycle=yes|permissive|designated|dismount true
-        switch railway=rail                                                         true
-        false
-
-assign no_water
-        switch waterway=river|canal|fairway true
-        switch route=ferry                  true
-        switch boat=yes                     true
-        false
-
-assign high_maxspeed
-        switch maxspeed=130|120|110 true
-        false
 
 #initial costs
 #---------------------------
 assign initialclassifier 
-        switch no_water      1
-        switch bad_paths     2
-        switch bad_oneway    3
-        switch bad_highway   4
-        switch no_access     5
-        switch high_maxspeed 6
+        switch steps       1
+        switch dismount    2
+        switch bad_highway 3
         22
 
 assign initialcost 
-        switch no_water      10000
-        switch bad_paths     10000
-        switch bad_oneway    10000
-        switch bad_highway   10000
-        switch no_access     10000
-        switch high_maxspeed 10000
+        switch steps       1000
+        switch dismount    1000
+        switch bad_highway 1000
         0
 
 #turncost
@@ -225,7 +199,41 @@ assign no_river_penalty
         switch estimated_river_class=6 0.8
         1.0
 
+#forbidden ways (costfactor>=10000)
+#---------------------------
+assign bad_sac_scale
+        sac_scale=difficult_alpine_hiking|demanding_alpine_hiking|alpine_hiking|demanding_mountain_hiking|mountain_hiking|hiking
+
+assign forbidden
+        #bad_paths
+        switch and highway=path smoothness=impassable|very_horrible|horrible                           10000
+        switch and highway=path bad_sac_scale                                                          10000
+        switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5                  10000
+        switch tracktype=grade5                                                                        10000
+        switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no            10000
+        switch and highway=path|track and smoothness= and surface= and mtb:scale= tracktype=           10000
+        #bad_oneway
+        switch and reversedirection=yes and oneway=yes not oneway:bicycle=no                           10000
+        switch and reversedirection=yes junction=roundabout|circular                                   10000
+        #bad_highway
+        switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount 10000
+        switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor                        10000
+        switch bicycle=no                                                                              10000
+        switch toll=yes                                                                                10000
+        #no_access
+        switch and access=no|private not bicycle=yes|permissive|designated|dismount                    10000
+        switch railway=rail                                                                            10000
+        #no_water
+        switch waterway=river|canal|fairway                                                            10000
+        switch route=ferry                                                                             10000
+        switch boat=yes                                                                                10000
+        #high_maxspeed
+        switch maxspeed=130|120|110                                                                    10000
+        0
+
+
 assign costfactor
+        add
         multiply fav_surface
         multiply fav_highway 
         multiply fav_cycleroute 
@@ -238,8 +246,11 @@ assign costfactor
         multiply noise_penalty
         multiply no_forest_penalty
                  no_river_penalty
+        forbidden
 
 ---context:node  # following code refers to node tags
+
+#Forbidden nodes=>initialcost values>= 1000000
 
 #forbidden nodes
 #---------------------------
