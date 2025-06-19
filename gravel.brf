@@ -59,7 +59,7 @@ assign initialcost
 #is implicitely added to costfactor
 # this is the cost (in Meter) for a 90-degree turn
 # The actual cost is calculated as turncost*cos(angle)
-assign turncost = 15
+assign turncost = 125
 
 #surface (good unpaved first)
 #---------------------------
