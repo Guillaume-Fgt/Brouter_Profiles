@@ -207,30 +207,30 @@ assign bad_sac_scale
 
 assign forbidden
         #bad_paths
-        switch and highway=path smoothness=impassable|very_horrible|horrible                                  10000
-        switch and highway=path bad_sac_scale                                                                 10000
-        switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5                         10000
-        switch tracktype=grade5                                                                               10000
-        switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no                   10000
-        switch and highway=path|track and smoothness= and surface= and mtb:scale= tracktype=                  10000
-        switch and highway=path|track and tracktype=grade4|grade5 and smoothness= and surface= and mtb:scale= 10000
+        switch and highway=path smoothness=impassable|very_horrible|horrible                              10000
+        switch and highway=path bad_sac_scale                                                             10000
+        switch and highway=path or mtb:scale=2|2+|2-|3|4|5|6 mtb:scale:uphill=2|3|4|5                     10000
+        switch tracktype=grade5                                                                           10000
+        switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no               10000
+        switch and highway=path|track and smoothness= and surface= and mtb:scale= tracktype=              10000
+        switch and highway=path|track and tracktype=grade4|grade5 and smoothness= and surface= mtb:scale= 10000
         #bad_oneway
-        switch and reversedirection=yes and oneway=yes not oneway:bicycle=no                                  10000
-        switch and reversedirection=yes junction=roundabout|circular                                          10000
+        switch and reversedirection=yes and oneway=yes not oneway:bicycle=no                              10000
+        switch and reversedirection=yes junction=roundabout|circular                                      10000
         #bad_highway
-        switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount        10000
-        switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor                               10000
-        switch bicycle=no                                                                                     10000
-        switch toll=yes                                                                                       10000
+        switch and highway=footway|bridleway|pedestrian not bicycle=yes|permissive|designated|dismount    10000
+        switch highway=motorway|trunk|motorway_link|trunk_link|raceway|corridor                           10000
+        switch bicycle=no                                                                                 10000
+        switch toll=yes                                                                                   10000
         #no_access
-        switch and access=no|private not bicycle=yes|permissive|designated|dismount                           10000
-        switch railway=rail                                                                                   10000
+        switch and access=no|private not bicycle=yes|permissive|designated|dismount                       10000
+        switch railway=rail                                                                               10000
         #no_water
-        switch waterway=river|canal|fairway                                                                   10000
-        switch route=ferry                                                                                    10000
-        switch boat=yes                                                                                       10000
+        switch waterway=river|canal|fairway                                                               10000
+        switch route=ferry                                                                                10000
+        switch boat=yes                                                                                   10000
         #high_maxspeed
-        switch maxspeed=130|120|110                                                                           10000
+        switch maxspeed=130|120|110                                                                       10000
         0
 
 
