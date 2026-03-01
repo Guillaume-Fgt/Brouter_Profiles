@@ -223,7 +223,7 @@ assign forbidden
         switch bicycle=no                                                                                 10000
         switch toll=yes                                                                                   10000
         #no_access
-        switch and access=no|private not bicycle=yes|permissive|designated|dismount                       10000
+        switch and access=no|private|customers not bicycle=yes|permissive|designated|dismount             10000
         switch railway=rail                                                                               10000
         #no_water
         switch waterway=river|canal|fairway                                                               10000
