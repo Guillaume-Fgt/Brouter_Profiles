@@ -176,7 +176,7 @@ assign noise_penalty
         switch estimated_noise_class=4 1.1
         switch estimated_noise_class=5 1.2
         switch estimated_noise_class=6 1.4
-        0.8
+        1.0
 
 #we want forest!
 #---------------------------
