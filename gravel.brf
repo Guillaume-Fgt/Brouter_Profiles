@@ -270,8 +270,8 @@ assign costfactor
 #---------------------------
 
 assign no_access
-        switch and access=no|private not bicycle=yes|permissive|designated|dismount 1000000
-        switch bicycle=no                                                                     1000000
+        switch and access=no|private not or bicycle=yes|permissive|designated|dismount foot=yes 1000000
+        switch bicycle=no                                                                       1000000
         0
 
 #barriers
