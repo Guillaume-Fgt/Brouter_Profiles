@@ -200,6 +200,17 @@ assign no_river_penalty
         switch estimated_river_class=6 0.8
         1.0
 
+#we don't want huge traffic
+#---------------------------
+assign no_traffic_penalty
+        switch estimated_traffic_class=1 0.8
+        switch estimated_traffic_class=2 0.9
+        switch estimated_traffic_class=3 1.0
+        switch estimated_traffic_class=4 1.1
+        switch estimated_traffic_class=5 1.2
+        switch estimated_traffic_class=6 1.4
+        1.0
+
 #forbidden ways (costfactor>=10000)
 #---------------------------
 assign bad_sac_scale
@@ -247,7 +258,8 @@ assign costfactor
         multiply fav_lowspeed
         multiply noise_penalty
         multiply no_forest_penalty
-                 no_river_penalty
+        multiply no_river_penalty
+                 no_traffic_penalty
         forbidden
 
 ---context:node  # following code refers to node tags
@@ -266,7 +278,8 @@ assign no_access
 #---------------------------
 assign barrierpenalty
         switch barrier=swing_gate|motorcycle_barrier|block|bollard|cycle_barrier|kissing_gate|kerb 1
-        switch barrier=gate|lift_gate switch safe_gate                                             1000000 1
+        switch barrier=gate|lift_gate switch 
+        safe_gate                                                                                  1000000 1
         0
 
 assign initialcost 0
