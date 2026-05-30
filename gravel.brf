@@ -224,6 +224,7 @@ assign forbidden
         switch tracktype=grade5                                                                           10000
         switch and highway=path|footway|cycleway|bridleway trail_visibility=bad|horrible|no               10000
         switch and highway=path|track and smoothness= and surface= and mtb:scale= tracktype=              10000
+        switch and highway=path|track obstacle=vegetation                                                 10000
         switch and highway=path|track and tracktype=grade4|grade5 and smoothness= and surface= mtb:scale= 10000
         #bad_oneway
         switch and reversedirection=yes and oneway=yes not oneway:bicycle=no                              10000
